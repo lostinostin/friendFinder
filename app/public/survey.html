@@ -1,0 +1,29 @@
+<script type="text/javascript">
+	function displayQuestions(){
+          var questionsArr = ["", "", "", "", "", "", "", "", "", "",];
+          for (var i = 0; i < questionsArr.length; i++) {
+	    var 
+          }
+        }
+
+	$('.submit').click(function () {
+		var name = $("#name").val().trim();
+		var photo = $("#photoURL").val().trim();
+
+		var newUser = {
+			name: name,
+			profilePic: photo,
+			score: scores,
+		}
+
+		$.post( "http://localhost:8080/api/friends", newUser).done(function(data) {
+				console.log(data);
+
+			}, function(err){
+				console.log(err);
+			});
+		return false;
+	});
+
+
+	</script>
