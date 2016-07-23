@@ -3,8 +3,9 @@
 <head>
 	<title>Survey</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<!-- <script src="https://code.jquery.com/jquery.js"></script> -->
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
@@ -69,9 +70,22 @@
 	</div>
 	
 </div>
+<div id="modal1" class="modal">
+  	<div class="modal-header">
+  		<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
+  	</div>
+    <div class="modal-content center-align">
+    	<h3>Your Best Friend Is</h3>
+    	<hr>
+      <h4 id="matchName"></h4>
+      <img id="matchImg" onError="this.src='https://answers.atlassian.com/images/icons/profilepics/default.png'" height="300px" width="300px"></img>
+    </div>
+</div>
 
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 <script type="text/javascript">
 
 	var questionsArr = ["Lay in bed and binge watch Netflix", "Read a classic piece of literature", "Play your favorite FPS", "Climb a mountain", "Paint a picture", "See your favorite band play live", "Lay out on the beach", "Go cliff jumping", "Get hammered with your friends", "Ride your bike through New York City"];
@@ -122,18 +136,12 @@
 		console.log(newUser);
 		var currentURL = window.location.origin;
 
-		$.post( "http://localhost:3000/api/friends", newUser, function(data) {
-				console.log(data);
-				// if (sum <= 20) {
-				// 	friendsData[i].push(req.body);
-				// 	res.json(friendsData[i]);
-				// } else if (21 <= sum <= 60 ){
-				// 	friendsData[i].push(req.body);
-				// 	res.json(friendsData[i]);
-				// } else {
-				// 	friendsData[i].push(req.body);
-				// 	res.json(friendsData[i]);
-				// }
+		$.post(currentURL + "/api/friends", newUser, function(data) {
+				console.log(newUser);
+				$("#matchName").text(data.name);
+	    		$('#matchImg').attr("src", data.photo);
+		    	
+		    	$("#modal1").openModal();
 			}, function(err){
 				console.log(err);
 			});
