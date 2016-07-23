@@ -40,7 +40,7 @@ module.exports = function(app){
 		// });
 		
 
-		fs.appendFile('friendsData.users', req.body, 'utf8', function(err) {
+		fs.appendFile('app/data/friends.js', req.body, 'utf8', function(err) {
 			if (err) throw err;
 			console.log("You've successfully written your data to the file");
 		});
