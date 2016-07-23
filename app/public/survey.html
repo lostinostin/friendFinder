@@ -1,24 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Survey</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+	<div class="row">
+	<div class="jumbotron">
+		<h1>Find a Friend</h1>
+		<p>ya lonely bastard</p>
+	</div>
+		<div class="col-lg-12">
+			<div class="panel-default">
+				<div class="panel-heading">
+					<h4>Name</h4>
+				</div>
+
+				<div class="panel-body">
+					<input type="text" class="form-control" id="name">
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="panel-default">
+				<div class="panel-heading">
+					<h4>Photo URL</h4>
+				</div>
+
+				<div class="panel-body">
+					<input type="text" class="form-control" id="photoURL">
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="panel-default">
+				<div class="panel-heading">
+					<h4>Bio</h4>
+				</div>
+
+				<div class="panel-body">
+					<textarea type="text" class="form-control" style="height: 200px" id="bio"></textarea>
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="panel-default">
+				<div class="panel-heading"><div><h4>Survey</h4></div>
+				<div class="panel-default">
+					<div class="panel-body">
+						<p>Instructions: There are ten events listed below. In order for us to help you pair up with a friend, we'll need you to pick the events that you would rather do. A zero indicates you won't be caught dead doing this, a ten indicates you would do it every day if you could.</p>
+					</div>
+					</div>
+
+				</div>
+				<!-- <div class="panel-heading">
+				</div> -->
+				<div id="surveyArea"class="panel-body">
+					
+				</div>
+				<button type="submit" class="btn btn-primary submit col-lg-12">Submit</button>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+
+</body>
 <script type="text/javascript">
+
+	var questionsArr = ["Lay in bed and binge watch Netflix", "Read a classic piece of literature", "Play your favorite FPS", "Climb a mountain", "Paint a picture", "See your favorite band play live", "Lay out on the beach", "Go cliff jumping", "Get hammered with your friends", "Ride your bike through New York City"];
+    var answerArr = [];
+
+
+
 	function displayQuestions(){
-          var questionsArr = ["", "", "", "", "", "", "", "", "", "",];
-          for (var i = 0; i < questionsArr.length; i++) {
-	    var 
-          }
-        }
+          
+	    for (var i = 0; i < questionsArr.length; i++) {
+	          var surveyQuestion = $('<div>');
+	          surveyQuestion.addClass('surveyQuestion');
+	          surveyQuestion.attr('id', 'surveyQuestion-' + i);
+	          $('#surveyArea').append(surveyQuestion);
+	          $('#surveyQuestion-' + i).append('<h3>Question ' + (i + 1) + '<br>' + questionsArr[i]);
+	          $('#surveyQuestion-' + i).append('<label for="">Answer</label>');
+	          $('#surveyQuestion-' + i).append('<input type="text" class="form-control" style="width: 70px" id="user_choice' + i + '">'); //needs drop-down menu
+
+
+	    }
+
+
+    } displayQuestions();
+
+
+    function gatherScores() {
+	    for (var i = 0; i < questionsArr.length; i++) {
+	    	var answerValue = $('#user_choice' + i).val().trim();
+	    	answerArr.push(answerValue);
+	    }
+
+	    return answerArr;
+	}
 
 	$('.submit').click(function () {
+
+
 		var name = $("#name").val().trim();
 		var photo = $("#photoURL").val().trim();
+		var bio = $("#bio").val().trim();
 
 		var newUser = {
 			name: name,
 			profilePic: photo,
-			score: scores,
+			bio: bio,
+			score: gatherScores(),
 		}
+		console.log(newUser);
+		var currentURL = window.location.origin;
 
-		$.post( "http://localhost:8080/api/friends", newUser).done(function(data) {
+		$.post( "http://localhost:3000/api/friends", newUser, function(data) {
 				console.log(data);
-
+				// if (sum <= 20) {
+				// 	friendsData[i].push(req.body);
+				// 	res.json(friendsData[i]);
+				// } else if (21 <= sum <= 60 ){
+				// 	friendsData[i].push(req.body);
+				// 	res.json(friendsData[i]);
+				// } else {
+				// 	friendsData[i].push(req.body);
+				// 	res.json(friendsData[i]);
+				// }
 			}, function(err){
 				console.log(err);
 			});
@@ -26,4 +141,62 @@
 	});
 
 
-	</script>
+</script>
+</html>
+
+
+
+
+	<!-- <script type="text/javascript">
+
+	// In this code below we create the Front-end Javascript which "POSTS" our form data to our express server.
+	// In essence, when the user hits submit, jQuery grabs all of the fields then sends a post request to our api
+	// Our api recognizes the route (/api/tables)... and then runs the associated code (found in api-routes.js).
+	// In this case the associated code "saves" the data to the table-data.js file or waitinglist-data.js file
+
+	$(".submit").on("click", function(){
+
+		// Here we grab the form elements
+		var newReservation = {
+			customerName: $('#reserve_name').val().trim(),
+			phoneNumber: $('#reserve_phone').val().trim(),
+			customerEmail: $('#reserve_email').val().trim(),
+			customerID: $('#reserve_uniqueID').val().trim()
+		};
+
+		console.log(newReservation);
+
+		// This line is the magic. It's very similar to the standard ajax function we used.
+		// Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
+		// The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
+		// depending on if a tables is available or not.
+
+		// Here we get the location of the root page.
+		// We use this instead of explicitly saying the URL is localhost:3001 because the url will change when we deploy.
+		var currentURL = window.location.origin;
+
+	    $.post(currentURL + "/api/tables", newReservation,
+	    function(data){
+
+	    	// If a table is available... tell user they are booked.
+	    	if(data == true){
+	    		alert("Yay! You are officially booked!")
+	    	}
+
+	    	// If a table is available... tell user they on the waiting list.
+	    	if(data == false){
+	    		alert("Sorry you are on the wait list")
+	    	}
+
+	    	// Clear the form when submitting
+    		$('#reserve_name').val("");
+			$('#reserve_phone').val("");
+			$('#reserve_email').val("");
+			$('#reserve_uniqueID').val("");
+
+	    });
+
+return false;
+
+});
+</script> -->
